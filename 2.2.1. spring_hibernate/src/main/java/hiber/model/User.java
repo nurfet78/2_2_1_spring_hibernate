@@ -1,25 +1,10 @@
 package hiber.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.OneToOne;
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-
+import javax.persistence.*;
 
 
 @Entity
 @Table(name = "users")
-@Data
-@Builder
-@AllArgsConstructor
 public class User {
 
    @Id
@@ -39,7 +24,7 @@ public class User {
    private String email;
 
 
-   @OneToOne(cascade = CascadeType.ALL)
+   @OneToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "id")
    private Car car;
 
@@ -51,6 +36,13 @@ public class User {
       this.firstName = firstName;
       this.lastName = lastName;
       this.email = email;
+   }
+
+   public User(String firstName, String lastName, String email, Car car) {
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.email = email;
+      this.car = car;
    }
 
    public Long getId() {

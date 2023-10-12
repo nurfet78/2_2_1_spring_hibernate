@@ -3,7 +3,9 @@ package hiber;
 import hiber.config.AppConfig;
 import hiber.model.Car;
 import hiber.model.User;
+import hiber.service.CarService;
 import hiber.service.UserService;
+import org.hibernate.Hibernate;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
@@ -15,43 +17,21 @@ public class MainApp {
             new AnnotationConfigApplicationContext(AppConfig.class);
 
       UserService userService = context.getBean(UserService.class);
+      CarService carService = context.getBean(CarService.class);
+
+      carService.add(new Car("Toyota", 7));
+      carService.add(new Car("Porsche", 5));
+      carService.add(new Car("Chrysler", 4));
+      carService.add(new Car("BMW", 9));
+
+      List<Car> cars = carService.listCars();
+
+      userService.add(new User("User1", "Lastname1", "user1@mail.ru", cars.get(0)));
+      userService.add(new User("User2", "Lastname2", "user2@mail.ru", cars.get(1)));
+      userService.add(new User("User3", "Lastname3", "user3@mail.ru", cars.get(2)));
+      userService.add(new User("User4", "Lastname4", "user4@mail.ru", cars.get(3)));
 
 
-      userService.add(User.builder()
-              .firstName("User1")
-              .lastName("Lastname1")
-              .email("user1@mail.ru")
-              .car(Car.builder()
-                      .model("Toyota")
-                      .series(7)
-                      .build()).build());
-
-      userService.add(User.builder()
-              .firstName("User2")
-              .lastName("Lastname2")
-              .email("user2@mail.ru")
-              .car(Car.builder()
-                      .model("Mercedes")
-                      .series(10)
-                      .build()).build());
-
-      userService.add(User.builder()
-              .firstName("User3")
-              .lastName("Lastname3")
-              .email("user3@mail.ru")
-              .car(Car.builder()
-                      .model("Porsche")
-                      .series(5)
-                      .build()).build());
-
-      userService.add(User.builder()
-              .firstName("User4")
-              .lastName("Lastname4")
-              .email("user4@mail.ru")
-              .car(Car.builder()
-                      .model("Chrysler")
-                      .series(4)
-                      .build()).build());
 
       List<User> users = userService.listUsers();
       for (User user : users) {
@@ -60,10 +40,11 @@ public class MainApp {
          System.out.println("Last Name = "+user.getLastName());
          System.out.println("Email = "+user.getEmail());
          System.out.println("Car = " + user.getCar());
+         System.out.println();
       }
 
-      System.out.println(userService.getUserByCar("Mercedes", 10));
-
+      System.out.println("Поиск Porsche серии 5");
+      System.out.println(userService.getUserByCar("Porsche", 5));
 
       context.close();
    }

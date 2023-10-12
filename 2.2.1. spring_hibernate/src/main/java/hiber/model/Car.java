@@ -1,18 +1,9 @@
 package hiber.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import javax.persistence.*;
+
 
 @Entity
-@Data
-@Builder
-@AllArgsConstructor
 public class Car {
 
     @Id
@@ -28,7 +19,7 @@ public class Car {
 
     }
 
-    public Car(String model, int series, User user) {
+    public Car(String model, int series) {
         this.model = model;
         this.series = series;
     }
@@ -55,5 +46,14 @@ public class Car {
 
     public void setSeries(int series) {
         this.series = series;
+    }
+
+    @Override
+    public String toString() {
+        return "Car {" +
+                "id = " + id +
+                ", model = '" + model + '\'' +
+                ", series = " + series +
+                '}';
     }
 }
